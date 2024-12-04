@@ -1,0 +1,386 @@
+{
+  "appraisalTypes": [
+    {
+      "id": "final-year",
+      "name": "Final Year Performance Appraisal",
+      "teams": [
+        {
+          "id": "General",
+          "name": "General",
+          "roles": [
+            {
+              "id": "General",
+              "name": "General",
+              "sections": [
+                {
+                  "id": "BEHAVIORAL_COMPETENCIES",
+                  "name": "1. Behavioural Competencies",
+                  "description": "Understands & Executes under Supervision",
+                  "details": [
+                    "Individual applies the competency in the simplest situation",
+                    "May be dependent on supervision and guidance",
+                    "Individual is competent to perform at day-today application of the capability",
+                    "Is able to apply and present concepts, information and approaches"
+                  ],
+                  "questions": [
+                    {
+                      "id": "COMMUNICATION_SKILLS",
+                      "text": "1.1 Communication Skills",
+                      "description": "Able to communicate orally and in writing in a clear, concise and impartial manner; able to take time to listen to and understand the perspectives of others and give feedback",
+                      "type": "complex-rating-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "ratingId": "COMMUNICATION_SKILLS_REVIEWEE_RATING",
+                          "commentId": "COMMUNICATION_SKILLS_REVIEWEE_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "ratingId": "COMMUNICATION_SKILLS_REVIEWER_RATING",
+                          "commentId": "COMMUNICATION_SKILLS_REVIEWER_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "COMMUNICATION_SKILLS_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": "PASSION_EXCELLENCE",
+                      "text": "1.2 Passion for Excellence",
+                      "description": "Able to keep the desire to be the best; willing to go extra mile and to life and work as an opportunity to make a difference",
+                      "type": "complex-rating-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "ratingId": "PASSION_EXCELLENCE_REVIEWEE_RATING",
+                          "commentId": "PASSION_EXCELLENCE_REVIEWEE_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "ratingId": "PASSION_EXCELLENCE_REVIEWER_RATING",
+                          "commentId": "PASSION_EXCELLENCE_REVIEWER_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "PASSION_EXCELLENCE_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": "ACCOUNTABILITY",
+                      "text": "1.3 Accountability",
+                      "description": "Able to take responsibility for all work activities and personal actions; able to follow through on commitments without being asked to",
+                      "type": "complex-rating-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "ratingId": "ACCOUNTABILITY_REVIEWEE_RATING",
+                          "commentId": "ACCOUNTABILITY_REVIEWEE_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "ratingId": "ACCOUNTABILITY_REVIEWER_RATING",
+                          "commentId": "ACCOUNTABILITY_REVIEWER_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "ACCOUNTABILITY_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": "ANALYTICAL_SKILLS",
+                      "text": "1.4 Analytical Skills",
+                      "description": "Able to use logical reasoning to break down raw information and undefined problems into specific, workable components",
+                      "type": "complex-rating-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "ratingId": "ANALYTICAL_SKILLS_REVIEWEE_RATING",
+                          "commentId": "ANALYTICAL_SKILLS_REVIEWEE_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "ratingId": "ANALYTICAL_SKILLS_REVIEWER_RATING",
+                          "commentId": "ANALYTICAL_SKILLS_REVIEWER_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "ANALYTICAL_SKILLS_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "ENGAGEMENT_REVIEW",
+                  "name": "2. Engagement Review - Job Performed",
+                  "questions": [
+                    {
+                      "id": "QUALITY_WORK",
+                      "text": "2.1 Quality of Work",
+                      "description": "The degree of excellence of the end results; thoroughness, accuracy and overall caliber of completed assignments",
+                      "type": "complex-rating-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "ratingId": "QUALITY_WORK_REVIEWEE_RATING",
+                          "commentId": "QUALITY_WORK_REVIEWEE_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "ratingId": "QUALITY_WORK_REVIEWER_RATING",
+                          "commentId": "QUALITY_WORK_REVIEWER_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "QUALITY_WORK_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": "CLIENT_SERVICE",
+                      "text": "2.2 Client Service and Communication",
+                      "description": "The employee/trainee's ability to relate to pertinent information to the appropriate personnel in a timely, clear and specific manner",
+                      "type": "complex-rating-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "ratingId": "CLIENT_SERVICE_REVIEWEE_RATING",
+                          "commentId": "CLIENT_SERVICE_REVIEWEE_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "ratingId": "CLIENT_SERVICE_REVIEWER_RATING",
+                          "commentId": "CLIENT_SERVICE_REVIEWER_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "CLIENT_SERVICE_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": "DELIVERY_COMPLETION",
+                      "text": "2.3 Delivery and Timely Completion Weight",
+                      "description": "This factor is applicable for routine and day-to-day tasks and activities. How frequently the employee/trainee completes his/her work with or without a sense of urgency and in a timely manner is appraised",
+                      "type": "complex-rating-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "ratingId": "DELIVERY_COMPLETION_REVIEWEE_RATING",
+                          "commentId": "DELIVERY_COMPLETION_REVIEWEE_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "ratingId": "DELIVERY_COMPLETION_REVIEWER_RATING",
+                          "commentId": "DELIVERY_COMPLETION_REVIEWER_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "DELIVERY_COMPLETION_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": "TECHNICAL_KNOWLEDGE",
+                      "text": "2.4 Technical Knowledge and Competence",
+                      "description": "The employee/trainee's job knowledge and/or technical skills in relations to what is reasonably required for the job",
+                      "type": "complex-rating-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "ratingId": "TECHNICAL_KNOWLEDGE_REVIEWEE_RATING",
+                          "commentId": "TECHNICAL_KNOWLEDGE_REVIEWEE_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "ratingId": "TECHNICAL_KNOWLEDGE_REVIEWER_RATING",
+                          "commentId": "TECHNICAL_KNOWLEDGE_REVIEWER_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "TECHNICAL_KNOWLEDGE_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": "COMMITMENT_ATTITUDE",
+                      "text": "2.5 Commitment and Attitude",
+                      "description": "The employee/trainee's ability to adopt positive emotions, thought and behaviour to promote caring and sharing working environment",
+                      "type": "complex-rating-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "ratingId": "COMMITMENT_ATTITUDE_REVIEWEE_RATING",
+                          "commentId": "COMMITMENT_ATTITUDE_REVIEWEE_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "ratingId": "COMMITMENT_ATTITUDE_REVIEWER_RATING",
+                          "commentId": "COMMITMENT_ATTITUDE_REVIEWER_COMMENT",
+                          "hasRating": true,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "COMMITMENT_ATTITUDE_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "GOALS_OBJECTIVES",
+                  "name": "3. Goals/ OKR / Objectives",
+                  "questions": [
+                    {
+                      "id": "GOALS_REVIEW",
+                      "text": "Goals for review",
+                      "type": "complex-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "commentId": "GOALS_REVIEW_REVIEWEE_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "commentId": "GOALS_REVIEW_REVIEWER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "GOALS_REVIEW_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "OVERALL_REMARKS",
+                  "name": "4. Overall Remarks",
+                  "questions": [
+                    {
+                      "id": "OVERALL_REMARKS",
+                      "text": "Add a remark",
+                      "type": "complex-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "commentId": "OVERALL_REMARKS_REVIEWEE_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "commentId": "OVERALL_REMARKS_REVIEWER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "OVERALL_REMARKS_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "DEVELOPMENT_PLANS",
+                  "name": "5. Development Plans",
+                  "questions": [
+                    {
+                      "id": "DEVELOPMENT_PLANS",
+                      "text": "Add a plan",
+                      "type": "complex-comment",
+                      "components": [
+                        {
+                          "type": "reviewee",
+                          "commentId": "DEVELOPMENT_PLANS_REVIEWEE_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "reviewer",
+                          "commentId": "DEVELOPMENT_PLANS_REVIEWER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        },
+                        {
+                          "type": "partner",
+                          "commentId": "DEVELOPMENT_PLANS_PARTNER_COMMENT",
+                          "hasRating": false,
+                          "hasComment": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
