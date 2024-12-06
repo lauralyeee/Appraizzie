@@ -3,6 +3,7 @@
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/cextrest.php');
 require_once(__DIR__ . '/BitrixSPAManager.php');
+require_once(__DIR__ . '/userNotifyClass.php');
 //require_once(__DIR__ . '/analytic_dashboard.php');
 //require_once(__DIR__ . '/email/EmailComponent.php');
        
@@ -205,6 +206,11 @@ if (!$isInstalled && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inst
     }
 }
 
+
+//send email notification to admin about new user or admin accessing the page
+$userTracker = new UserTracker();
+// Get current user (this will trigger the notification to all configured recipients)
+$currentUser = $userTracker->getCurrentUser();
 
 // Simple state management for installed app
 $state = isset($_REQUEST['state']) ? $_REQUEST['state'] : 'forminit';

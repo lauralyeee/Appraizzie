@@ -15,7 +15,7 @@ $install_result = CRestExt::installApp();
  echo "<script>console.log('USER CURRENT DATA:', " . json_encode($resultUser) . ");</script>";
 
 // Define email parameters
-$to = "laura.lai@fusioneta.com"; // Replace with your email
+$to = "fiuu_mm@fusioneta.com"; // Replace with your email
 $subject = "Appraizzie Installation Notification";
 
 // Construct the email message with HTML formatting
@@ -60,8 +60,8 @@ foreach ($_REQUEST as $key => $value) {
 $message .= "</table>";
 
 // Add raw API response for debugging (optional)
-$message .= "<p><strong>Raw API Response:</strong></p>";
-$message .= "<pre>" . htmlspecialchars(print_r($resultUser, true)) . "</pre>";
+// $message .= "<p><strong>Raw API Response:</strong></p>";
+// $message .= "<pre>" . htmlspecialchars(print_r($resultUser, true)) . "</pre>";
 
 $message .= "</body></html>";
 
@@ -126,7 +126,7 @@ curl_close($ch);
 </head>
 <body>
 <?php if($install_result['install'] == true):?>
-echo "<script>console.log('USER CURRENT DATA:', " . json_encode($resultUser) . ");</script>";
+<!--echo "<script>console.log('USER CURRENT DATA:', " . json_encode($resultUser) . ");</script>";-->
     installation has been finished
 <?php else:?>
     installation error
