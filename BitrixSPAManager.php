@@ -479,7 +479,8 @@ class BitrixSPAManager {
 				'fields' => array_merge(
                     $fields,
                     ['title' => $recordTitle],
-                    ['assignedById'=> $revieweetoresp]
+                    ['assignedById'=> $revieweetoresp],
+                    ['stageId' => 'Reviewee Pending']
                 )
 			]
 		);
