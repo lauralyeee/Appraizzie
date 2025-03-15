@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/cextrest.php');
 require_once(__DIR__ . '/BitrixSPAManager.php');
-require_once(__DIR__ . '/userNotifyClass.php');
+require_once(__DIR__ . '/userDealNotifyClass.php');
 //require_once(__DIR__ . '/analytic_dashboard.php');
 //require_once(__DIR__ . '/email/EmailComponent.php');
        
@@ -11,6 +11,11 @@ session_start();
 $installationResult = null;
 $isInstalled = false;  // for to check whether this bitrix ady install
 $installedSpaInfo = null;
+$website_url = "https://fusioneta.com.my/";
+$facebook_url = "https://www.facebook.com/Fusioneta/";
+$linkedin_url = "https://www.linkedin.com/company/fusioneta-sdn-bhd/?original_referer=https%3A%2F%2Ffusioneta.com%2F";
+$appraizzie_url="https://fusioneta.com/appraizzie/performance-appraisal-app/";
+
 
 // Retrieve the member ID from $_REQUEST
 $memberId = $_REQUEST['member_id'] ?? null;
@@ -33,6 +38,68 @@ if (!empty($_REQUEST['member_id'])) {
         }
     }
 }
+$instanceId=$_REQUEST['member_id'];
+function getPaidInfoFromSettings($instanceId) {
+    $settingsPath = INSTANCE_SETTINGS_DIR . '/' . $instanceId . '/spa_settings.json';
+
+    if (!file_exists($settingsPath)) {
+        throw new Exception("Settings file not found for instance: " . $instanceId);
+    }
+
+    $settings = json_decode(file_get_contents($settingsPath), true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception("Invalid JSON in settings file");
+    }
+
+    // Ensure necessary fields exist
+    if (!isset($settings['installDate'], $settings['expirationDate'], $settings['isPaid'], $settings['isExpired'])) {
+        throw new Exception("Missing required fields in settings");
+    }
+
+    // Calculate days left
+    $currentDate = new DateTime();
+    $expirationDate = new DateTime($settings['expirationDate']);
+    $interval = $currentDate->diff($expirationDate);
+    $daysLeft = $interval->invert ? 0 : $interval->days; // If expired, set to 0
+
+    return [
+        'isPaid' => $settings['isPaid'],
+        'isExpired' => $settings['isExpired'],
+        'expirationDate' => $settings['expirationDate'],
+        'installDate' => $settings['installDate'],
+        'daysLeft' => $daysLeft
+    ];
+}
+
+
+// if ($enablePaymentSystem){
+//     // Now use your function to get payment info
+//     try {
+//         $paymentInfo = getPaidInfoFromSettings($instanceId);
+        
+//         // Extract the values we need
+//         $isPaid = $paymentInfo['isPaid'];
+//         $isExpired = $paymentInfo['isExpired'];
+//         $daysLeft = $paymentInfo['daysLeft'];
+//         $expirationDate = $paymentInfo['expirationDate'];
+//         $installDate = $paymentInfo['installDate'];
+        
+//     } catch (Exception $e) {
+//         // Handle any errors (file not found, invalid JSON, etc.)
+//         error_log("Error retrieving payment info: " . $e->getMessage());
+        
+//         // Set default values for fallback
+//         $isPaid = false;
+//         $isExpired = false;
+//         $daysLeft = 30; // Default trial period
+//         $expirationDate = date('Y-m-d', strtotime('+30 days'));
+//         $installDate = date('Y-m-d');
+//     }
+
+// }
+
+
+
 
 //when click install
 if (!$isInstalled && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install_submitted'])) {
@@ -208,9 +275,73 @@ if (!$isInstalled && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inst
 
 
 //send email notification to admin about new user or admin accessing the page
-$userTracker = new UserTracker();
+$userDealTracker = new UserDealTracker();
+
+// Global switch for payment system
+$enablePaymentSystem = true;
+
+// Default payment info (for old users without payment enforcement)
+$paymentInfo = [
+    'isPaid' => false,
+    'isExpired' => false,
+    'daysLeft' => 30, // Default trial period
+    'expirationDate' => date('Y-m-d', strtotime('+30 days')),
+    'installDate' => date('Y-m-d')
+];
+
+try {
+    // Attempt to get payment info
+    $retrievedPaymentInfo = getPaidInfoFromSettings($instanceId);
+
+    // Check if expirationDate exists in the retrieved settings
+    if (is_array($retrievedPaymentInfo) && array_key_exists('expirationDate', $retrievedPaymentInfo)) {
+        // If payment system is enabled, apply the retrieved payment info
+        if ($enablePaymentSystem) {
+            $paymentInfo = $retrievedPaymentInfo;
+        }
+    } else {
+        // Old user without expirationDate → Keep default values (no payment required)
+        error_log("User $instanceId is pre-commercialization. No payment required.");
+    }
+} catch (Exception $e) {
+    // Handle errors (e.g., file not found, invalid JSON)
+    error_log("Error retrieving payment info: " . $e->getMessage());
+}
+//global switch for payment thing
+// $enablePaymentSystem = false;
+// // Initialize payment info with default values
+// $paymentInfo = [
+//     'isPaid' => false,
+//     'isExpired' => false,
+//     'daysLeft' => 30, // Default trial period
+//     'expirationDate' => date('Y-m-d', strtotime('+30 days')),
+//     'installDate' => date('Y-m-d')
+// ];
+// if ($enablePaymentSystem) {
+//     // Now use your function to get payment info
+//     try {
+//         $retrievedPaymentInfo = getPaidInfoFromSettings($instanceId);
+//         // Only update if we got valid data
+//         if (is_array($retrievedPaymentInfo)) {
+//             $paymentInfo = $retrievedPaymentInfo;
+//         }
+//     } catch (Exception $e) {
+//         // Handle any errors (file not found, invalid JSON, etc.)
+//         error_log("Error retrieving payment info: " . $e->getMessage());
+//         // Default values already set above
+//     }
+// }
+
+
+
+
+// Set the payment info in the UserDealTracker instance
+$userDealTracker->setPaymentInfo($paymentInfo);
+
 // Get current user (this will trigger the notification to all configured recipients)
-$currentUser = $userTracker->getCurrentUser();
+// Get current user (this will trigger the notification to all configured recipients)
+// and also create the deal with payment information
+$currentUser = $userDealTracker->getCurrentUser();
 
 // Simple state management for installed app
 $state = isset($_REQUEST['state']) ? $_REQUEST['state'] : 'forminit';
@@ -222,9 +353,6 @@ $pages = [
    // You can add more pages here
 ];
 
-$website_url = "https://fusioneta.com.my/";
-$facebook_url = "https://www.facebook.com/Fusioneta/";
-$linkedin_url = "https://www.linkedin.com/company/fusioneta-sdn-bhd/?original_referer=https%3A%2F%2Ffusioneta.com%2F";
 
 ?>
 
@@ -787,6 +915,200 @@ $linkedin_url = "https://www.linkedin.com/company/fusioneta-sdn-bhd/?original_re
                 </div>
 
             </div>
+            
+                <?php
+                $isPaid = isset($paymentInfo['isPaid']) ? $paymentInfo['isPaid'] : false;
+                $isExpired = isset($paymentInfo['isExpired']) ? $paymentInfo['isExpired'] : false;
+                $daysLeft = isset($paymentInfo['daysLeft']) ? $paymentInfo['daysLeft'] : 0;
+                $expirationDate = isset($paymentInfo['expirationDate']) ? $paymentInfo['expirationDate'] : null;
+                ?>
+              <!-- Pricing Modal -->
+                <div id="pricing-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-btn" onclick="closePricingModal()">&times;</span>
+                        <h2>Subscription Plan</h2>
+                        <p><strong>RM 3,000 per year</strong></p>
+                        
+                        <?php if (!$isPaid && !$isExpired && $daysLeft > 0): ?>
+                            <p>Your trial period: <strong><?php echo $daysLeft; ?> days remaining</strong></p>
+                            <!-- <p>Installed on: <?php echo date('F j, Y', strtotime($installDate)); ?></p> -->
+                            <p>Expires on: <?php echo date('F j, Y', strtotime($expirationDate)); ?></p>
+                        <?php endif; ?>
+                        
+                        <p>Your subscription will include:</p>
+                        <ul>
+                            <li>✅ 2 Online Training Sessions</li>
+                            <li>✅ Full Support Throughout Subscription</li>
+                            <li>✅ Performance Review Portal Access</li>
+                        </ul>
+                        <a href="<?php echo $appraizzie_url; ?>" class="buy-button" target="_blank" rel="noopener noreferrer">Contact Us to Subscribe</a>
+                    </div>
+                </div>
+
+
+                <!-- Paywall for expired accounts -->
+                <div id="paywall" class="modal">
+                    <div class="modal-content">
+                        <h2>Subscription Expired</h2>
+                        <p><strong>Your access has expired</strong></p>
+                        <p>Your subscription ended on: <?php echo date('F j, Y', strtotime($expirationDate)); ?></p>
+                        <p>Please renew your subscription to continue using the Performance Review Portal.</p>
+                        <ul>
+                            <li>✅ 2 Online Training Sessions</li>
+                            <li>✅ Full Support Throughout Subscription</li>
+                            <li>✅ Performance Review Portal Access</li>
+                        </ul>
+                        <a href="<?php echo $appraizzie_url; ?>" class="buy-button" target="_blank" rel="noopener noreferrer">Contact Us to Renew</a>
+                    </div>
+                </div>
+                <!-- JavaScript for Modal and Paywall -->
+              
+                <script>
+         
+                        // Payment status handling
+                        window.onload = function() {
+
+                            var enablePaymentSystem = <?php echo json_encode($enablePaymentSystem); ?>;
+
+                            if (enablePaymentSystem){
+                                var isPaid = <?php echo json_encode($isPaid); ?>;
+                                var isExpired = <?php echo json_encode($isExpired); ?>;
+                                
+                                if (!isPaid) {
+                                    if (isExpired) {
+                                        // Show paywall and block access
+                                        document.getElementById('paywall').style.display = 'block';
+                                        // Disable scrolling on the body
+                                        document.body.style.overflow = 'hidden';
+                                        
+                                        // Disable closing the paywall by clicking outside
+                                        var paywall = document.getElementById('paywall');
+                                        paywall.onclick = function(event) {
+                                            event.stopPropagation();
+                                        };
+                                    } else {
+                                        // Show regular pricing modal for unpaid but not expired users
+                                        openPricingModal();
+                                    }
+                                }
+                                // For paid users, do nothing (modal stays hidden)
+                            }
+                            
+                        };
+
+                        function openPricingModal() {
+                            document.getElementById('pricing-modal').style.display = 'block';
+                        }
+
+                        function closePricingModal() {
+                            document.getElementById('pricing-modal').style.display = 'none';
+                        }
+
+                        // Close the pricing modal when clicking outside of it (not for paywall)
+                        window.onclick = function(event) {
+                            var modal = document.getElementById('pricing-modal');
+                            if (event.target === modal) {
+                                modal.style.display = 'none';
+                            }
+                        };
+                </script>
+            
+                <!-- CSS for Modal -->
+                <style>
+                    .modal {
+                        display: none;
+                        position: fixed;
+                        z-index: 1000;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.4);
+                    }
+                    
+                    .modal-content {
+                        background-color: white;
+                        margin: 10% auto;
+                        padding: 30px;
+                        width: 40%;
+                        border-radius: 12px;
+                        text-align: center;
+                        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                    }
+                    
+                    .close-btn {
+                        float: right;
+                        font-size: 28px;
+                        cursor: pointer;
+                        color: #666;
+                        transition: color 0.3s ease;
+                    }
+                    
+                    .close-btn:hover {
+                        color: #4263EB;
+                    }
+                    
+                    .modal-content h2 {
+                        color: #4263EB;
+                        font-size: 28px;
+                        margin-bottom: 20px;
+                        font-weight: 600;
+                    }
+                    
+                    .modal-content p {
+                        font-size: 18px;
+                        color: #555;
+                        margin-bottom: 15px;
+                    }
+                    
+                    .modal-content ul {
+                        text-align: left;
+                        padding-left: 20%;
+                        margin: 10px 0;
+                    }
+                    
+                    .modal-content li {
+                        margin-bottom: 10px;
+                        font-size: 16px;
+                    }
+                    
+                    .buy-button {
+                        background-color: #4263EB;
+                        color: white;
+                        padding: 12px 25px;
+                        text-decoration: none;
+                        border-radius: 8px;
+                        display: inline-block;
+                        margin-top: 20px;
+                        font-size: 16px;
+                        font-weight: 500;
+                        /*transition: background-color 0.3s ease;*/
+                        border: none;
+                        cursor: pointer;
+                    }
+                    #paywall {
+                        display: none;
+                        position: fixed;
+                        z-index: 2000; /* Higher than other elements */
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.7); /* Darker background */
+                    }
+
+                    #paywall .modal-content {
+                        margin: 15% auto;
+                    }
+
+                    /* Make sure the close button doesn't appear on the paywall */
+                    #paywall .close-btn {
+                        display: none;
+                    }
+                    /*.buy-button:hover {*/
+                    /*    background-color: #3651c9;*/
+                    /*}*/
+                </style>
 
         <?php else: ?>
             <!-- Installation UI -->
@@ -860,9 +1182,9 @@ $linkedin_url = "https://www.linkedin.com/company/fusioneta-sdn-bhd/?original_re
                 const steps = [
                     { progress: 20, text: 'Creating SPA structure...' },
                     { progress: 40, text: 'Creating custom fields...' },
-                    { progress: 60, text: 'Creating initial record...' },
-                    { progress: 80, text: 'Setting up demo data...' },
-                    { progress: 100, text: 'Finalizing installation...' }
+                    { progress: 60, text: 'Creating instance config...' },
+                    { progress: 80, text: 'Setting up for instance...' },
+                    { progress: 100, text: 'Finalizing installation (few mins)...' }
                 ];
 
                 let currentStep = 0;

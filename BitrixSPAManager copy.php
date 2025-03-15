@@ -140,8 +140,8 @@ class BitrixSPAStageManager {
 
     public function createCustomStages() {
         $stages = [
-            ['name' => 'Initialized-Reviewee Pending', 'sort' => 5],
-            // ['name' => 'Reviewee Pending', 'sort' => 10],
+            ['name' => 'Initialized', 'sort' => 5],
+            ['name' => 'Reviewee Pending', 'sort' => 10],
             ['name' => 'Reviewer Pending', 'sort' => 15],
             ['name' => 'Partner Pending', 'sort' => 20],
             ['name' => 'Submitted', 'sort' => 25]
@@ -551,11 +551,11 @@ class BitrixSPAManager {
             case 'partner':
                 $statusId = $findStageStatusId('Submitted');
                 break;
-            // case 'forminit':
-            //     $statusId = $findStageStatusId('Reviewee Pending');
-            //     break;
+            case 'forminit':
+                $statusId = $findStageStatusId('Reviewee Pending');
+                break;
             default:
-                $statusId = $findStageStatusId('Initialized-Reviewee Pending');
+                $statusId = $findStageStatusId('Initialized');
                 break;
         }
     
